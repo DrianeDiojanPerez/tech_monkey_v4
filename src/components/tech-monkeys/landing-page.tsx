@@ -994,29 +994,39 @@ function FollowSection() {
     { bg: "#00C2D1", label: "WRAP\nDAY", small: "before/after", img: "https://picsum.photos/seed/tm-wrap/420/520" },
     { bg: "#FFD23F", label: "FRESH\nDROPS", small: "new finishes", img: "https://picsum.photos/seed/tm-drops/420/520" },
   ]
+  // Triple the tiles for a seamless right-to-left marquee — translating
+  // by exactly one set-width then snapping to 0 is visually invisible
+  // because the next set already occupies the same screen positions.
+  const doubled = [...tiles, ...tiles, ...tiles]
   return (
     <section className="follow">
       <div className="follow-head">
         <h2 className="follow-title">FOLLOW US</h2>
         <div className="follow-handle">@TECHMONKEYSBZ</div>
       </div>
-      <div className="follow-grid">
-        {tiles.map((t, i) => (
-          <div key={i} className="follow-tile" style={{ background: t.bg }}>
-            <img className="tile-img" src={t.img} alt="" loading="lazy" />
-            <div className="tile-overlay">
-              <div className="tile-corner-sticker">
-                <Sticker design={STICKER_DESIGNS[(i * 5) % STICKER_DESIGNS.length]!} size={50} rot={i * 15 - 20} />
-              </div>
-              <div className="tile-text">
-                <div className="tile-label">
-                  {t.label.split("\n").map((l, j) => <div key={j}>{l}</div>)}
+      <div className="follow-marquee">
+        <div className="follow-track">
+          {doubled.map((t, i) => (
+            <div key={i} className="follow-tile" style={{ background: t.bg }}>
+              <img className="tile-img" src={t.img} alt="" decoding="async" />
+              <div className="tile-overlay">
+                <div className="tile-text">
+                  <div className="tile-label">
+                    {t.label.split("\n").map((l, j) => <div key={j}>{l}</div>)}
+                  </div>
+                  <div className="tile-small">{t.small}</div>
                 </div>
-                <div className="tile-small">{t.small}</div>
+              </div>
+              <div className="tile-hover" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="#fff" />
+                </svg>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   )

@@ -808,11 +808,12 @@
 /* ====== Follow ====== */
 .follow {
   background: #f5f3ee;
-  padding: 70px 36px;
+  padding: 70px 0;
 }
 .follow-head {
   max-width: 1400px;
   margin: 0 auto 24px;
+  padding: 0 36px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -828,22 +829,52 @@
   letter-spacing: 0.1em;
   color: rgba(10,22,40,0.7);
 }
-.follow-grid {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+/* Right-to-left marquee. Hovering a tile pauses the strip; leaving
+   resumes it. Each tile reveals an Instagram-style icon overlay. */
+.follow-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+.follow-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: tm-follow-marquee 25s linear infinite;
+  padding: 4px 0;
+  will-change: transform;
+  backface-visibility: hidden;
+  /* Each tile = 240px wide + 14px gap = 254px. 5 originals (one full
+     set) = 1270px — that's our exact loop distance. */
+  --tile-stride: 1270px;
+}
+.follow-marquee:hover .follow-track { animation-play-state: paused; }
+/* Right-to-left, fixed pixel distance so the speed is constant regardless
+   of image load state or layout reflow. */
+@keyframes tm-follow-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(calc(var(--tile-stride) * -1), 0, 0); }
 }
 .follow-tile {
+  flex: 0 0 240px;
   aspect-ratio: 1/1.2;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  transition: transform 0.2s;
+  transition: transform 0.25s ease;
   color: #fff;
 }
-.follow-tile:hover { transform: scale(1.02); }
+.follow-tile:hover { transform: scale(1.04); }
+.tile-hover {
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10,22,40,0.55);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+.follow-tile:hover .tile-hover { opacity: 1; }
 .tile-img {
   position: absolute;
   inset: 0;
@@ -1024,7 +1055,7 @@
   .features { grid-template-columns: 1fr; gap: 32px; padding: 50px 24px; }
   .offer { grid-template-columns: 1fr; }
   .nav-links { display: none; }
-  .follow-grid { grid-template-columns: repeat(2, 1fr); }
+  .follow-tile { flex-basis: 200px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .foot-newsletter { grid-column: 1 / -1; }
 }
