@@ -245,8 +245,11 @@ function FallingStickers() {
 
   useEffect(() => {
     setMounted(true)
+    // Shrink stickers on narrow viewports so all six fit the hero band.
+    const sizeScale = window.innerWidth < 700 ? 0.55 : 1
     const initial: Array<FallingItem> = INITIAL_FALLING.map((base, i) => ({
       ...base,
+      size: base.size * sizeScale,
       x: SPAWN_POINTS[i]!.x + (Math.random() * 10 - 5),
       // Top of the extended layer = ~100vh above the hero, off-screen.
       // Stagger per index so they don't all enter the viewport at once.
@@ -1206,7 +1209,7 @@ function Footer({ accent }: { accent: string }) {
             Sign up for drops, new finishes, and Belize-only discounts straight from the press.
           </p>
           <form className="foot-form" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="your@email.com" />
+            <input type="email" placeholder="your@email.com" suppressHydrationWarning />
             <button className="foot-submit" style={{ background: accent }}>SUBMIT →</button>
           </form>
           <div className="foot-social">
