@@ -15,13 +15,26 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Tech Monkeys Belize — Print, Stickers, Signs & IT",
       },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Anton&family=Dela+Gothic+One&family=Permanent+Marker&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap",
       },
     ],
   }),
