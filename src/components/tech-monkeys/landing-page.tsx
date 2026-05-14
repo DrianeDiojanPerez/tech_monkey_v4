@@ -621,16 +621,16 @@ function TornEdge({ flip = false, fill = "#f5f3ee", height = 110 }: {
 
 function TechMonkeysLogo({ size = 52 }: { size?: number }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", lineHeight: 1 }}>
-        <span style={{ fontFamily: "Anton, sans-serif", fontSize: size * 0.5, color: "#fff", letterSpacing: "0.04em" }}>TECH</span>
-        <span style={{ fontFamily: "Anton, sans-serif", fontSize: size * 0.5, color: "#fff", letterSpacing: "0.04em" }}>MONKEYS</span>
-      </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
       <img
         src="/tech-monkeys-logo.svg"
         alt="Tech Monkeys"
-        style={{ height: size, width: "auto", display: "block" }}
+        style={{ height: size, width: "auto", display: "block", flexShrink: 0 }}
       />
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", lineHeight: 1, gap: 2 }}>
+        <span style={{ fontFamily: "Anton, sans-serif", fontSize: size * 0.5, color: "#fff", letterSpacing: "0.04em" }}>TECH</span>
+        <span style={{ fontFamily: "Anton, sans-serif", fontSize: size * 0.5, color: "#fff", letterSpacing: "0.04em" }}>MONKEYS</span>
+      </div>
     </div>
   )
 }
@@ -1019,24 +1019,6 @@ function SocialIcon({ name }: { name: "facebook" | "instagram" | "whatsapp" | "t
   )
 }
 
-function FooterMonkeyMark() {
-  return (
-    <svg viewBox="0 0 200 200" width="140" height="140">
-      <circle cx="100" cy="115" r="68" fill="#00C2D1" />
-      <circle cx="35" cy="100" r="22" fill="#00C2D1" />
-      <circle cx="165" cy="100" r="22" fill="#00C2D1" />
-      <circle cx="35" cy="100" r="9" fill="#FFD23F" />
-      <circle cx="165" cy="100" r="9" fill="#FFD23F" />
-      <ellipse cx="100" cy="135" rx="44" ry="38" fill="#FFD23F" />
-      <circle cx="82" cy="108" r="8" fill="#0a1628" />
-      <circle cx="118" cy="108" r="8" fill="#0a1628" />
-      <path d="M75 140 Q100 160 125 140" fill="none" stroke="#0a1628" strokeWidth="6" strokeLinecap="round" />
-      <line x1="100" y1="38" x2="100" y2="22" stroke="#fff" strokeWidth="6" />
-      <circle cx="100" cy="18" r="7" fill="#FF6B35" />
-    </svg>
-  )
-}
-
 function Footer({ accent }: { accent: string }) {
   const socials = ["facebook", "instagram", "whatsapp", "tiktok"] as const
   return (
@@ -1095,11 +1077,7 @@ function Footer({ accent }: { accent: string }) {
       </div>
 
       <div className="foot-wordmark" aria-hidden="true">
-        <FooterMonkeyMark />
-        <div className="foot-wordmark-text">
-          <span>TECH</span>
-          <span>MONKEYS</span>
-        </div>
+        <TechMonkeysLogo size={140} />
       </div>
 
       <div className="foot-bottom">
@@ -1133,7 +1111,6 @@ export function TechMonkeysLanding() {
       <OfferCard accent={ACCENT} />
 
       <div style={{ background: "#f5f3ee" }}>
-        <TornEdge fill="#f5f3ee" />
         <FeatureStrip />
         <TornEdge fill="#00C2D1" />
       </div>
