@@ -84,9 +84,34 @@
 .nav-pill:active {
   transform: translate(-4px, 5px) scale(0.97);
 }
+/* The holographic.png IS a ticket — used as a contain-fitted background.
+   No CSS borders or pseudo-element punch hole; the artwork supplies them. */
 .nav-deal {
-  padding: 10px 22px 10px 18px;
-  border-radius: 999px;
+  padding: 0 12px 0 18px;
+  height: 34px;
+  aspect-ratio: 172 / 58;   /* match the source PNG so it doesn't stretch */
+  width: auto;
+  border-radius: 0;
+  background: url('/holographic.png') center / 100% 100% no-repeat;
+  background-color: transparent;
+  color: #0a1628;
+  text-shadow: 0 0 1px rgba(255,255,255,0.7);
+  transform: rotate(-3deg);
+  border: none;
+  box-shadow: none;
+  min-width: 0;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.nav-deal:hover {
+  background: url('/holographic.png') center / 100% 100% no-repeat;
+  transform: rotate(-3deg) scale(1.04);
+  box-shadow: none;
+  filter: brightness(1.08) saturate(1.1);
+}
+.nav-deal:active {
+  transform: rotate(-3deg) scale(0.97);
 }
 .nav-deal svg { animation: tm-flicker 1.6s ease-in-out infinite; }
 @keyframes tm-flicker {
@@ -417,7 +442,7 @@
 /* ====== Built different ====== */
 .built {
   background: #f5f3ee;
-  padding: 80px 36px 60px;
+  padding: 80px 0 60px;
   text-align: center;
 }
 .built-header { max-width: 900px; margin: 0 auto 50px; }
@@ -475,15 +500,15 @@
 
 .built-row-wrap {
   position: relative;
-  max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
 }
 .built-row {
   display: flex;
-  gap: 22px;
+  gap: 26px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 30px 20px 50px;
+  padding: 30px 36px 50px;
   scrollbar-width: none;
 }
 .built-row::-webkit-scrollbar { display: none; }
@@ -500,43 +525,72 @@
   z-index: 5;
   border: 2px solid #fff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
-.row-nav-l { left: -10px; }
-.row-nav-r { right: -10px; }
+.row-nav:hover {
+  background: #FFD23F;
+  color: #0a1628;
+}
+.row-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+.row-nav-l { left: 20px; }
+.row-nav-r { right: 20px; }
 
 .prod-card {
-  flex: 0 0 240px;
+  flex: 0 0 calc((100vw - 36px * 2 - 26px * 3) / 4);
+  max-width: 420px;
+  min-width: 280px;
   scroll-snap-align: start;
   background: #fff;
-  border-radius: 24px;
-  padding: 20px 18px 22px;
+  border-radius: 28px;
+  padding: 32px 24px 28px;
   text-align: center;
   box-shadow: 0 18px 30px -10px rgba(10,22,40,0.18);
   border: 1px solid rgba(10,22,40,0.06);
   position: relative;
-  transition: transform 0.2s;
+  transition: background-color 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  display: flex;
+  flex-direction: column;
 }
-.prod-card:hover { transform: translateY(-6px); }
+/* Alternating tilt so the row reads as a stack of cards, not a grid */
+.prod-card:nth-child(odd)  { transform: rotate(-3deg); }
+.prod-card:nth-child(even) { transform: rotate(3deg); }
+
+.prod-card:nth-child(odd):hover {
+  background: #0099ff;
+  transform: rotate(-3deg) translateY(-6px);
+}
+.prod-card:nth-child(even):hover {
+  background: #0099ff;
+  transform: rotate(3deg) translateY(-6px);
+}
+.prod-card:hover .prod-title { color: #fff; }
+.prod-card:hover .prod-art { background: linear-gradient(180deg, #fff 0%, #dbecff 100%) !important; }
+.prod-card:hover .prod-shop { box-shadow: -4px 5px 0 0 #0a1628; }
 .prod-title {
   font-family: 'Anton', sans-serif;
-  font-size: 22px;
+  font-size: 30px;
   line-height: 1;
   margin: 0;
   letter-spacing: 0.02em;
+  transition: color 0.25s ease;
 }
 .prod-title span { display: block; }
 .prod-art {
-  height: 150px;
+  flex: 1;
+  min-height: 260px;
   border-radius: 14px;
-  margin: 16px 0;
+  margin: 24px 0;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
+  transition: background 0.25s ease;
 }
-.prod-stars { color: #FFD23F; font-size: 16px; letter-spacing: 2px; margin-bottom: 14px; }
+.prod-stars { color: #FFD23F; font-size: 18px; letter-spacing: 3px; margin-bottom: 18px; }
 .prod-shop {
   width: 100%;
-  padding: 12px;
-  font-size: 14px;
+  padding: 14px;
+  font-size: 15px;
 }
 .prod-badge {
   position: absolute;
@@ -544,18 +598,18 @@
   z-index: 2;
 }
 .badge-star {
-  width: 70px; height: 70px;
-  background: #FF6B35;
-  color: #fff;
+  width: 96px; height: 96px;
+  background: url('/holographic-star.png') center / contain no-repeat;
+  color: #0a1628;
   font-family: 'Anton', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
   text-align: center;
   display: flex; align-items: center; justify-content: center;
-  border: 3px solid #fff;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  font-weight: 700;
+  text-shadow: 0 0 2px rgba(255,255,255,0.8);
   transform: rotate(15deg);
-  box-shadow: 4px 4px 0 rgba(10,22,40,0.3);
+  filter: drop-shadow(2px 4px 0 rgba(10,22,40,0.25));
 }
 
 .built-cta { margin-top: 16px; }
@@ -593,6 +647,7 @@
   border-radius: 50%;
   border: 3px solid #0a1628;
 }
+.prem-icon { display: inline-flex; align-items: center; }
 
 /* ====== Offer ====== */
 .offer-wrap { padding: 40px 36px 60px; background: #f5f3ee; }

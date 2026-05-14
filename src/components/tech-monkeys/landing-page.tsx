@@ -55,7 +55,7 @@ const PRODUCTS: Array<Product> = [
 const FEATURES = [
   { t: "BUILT FOR THE\nBELIZE SUN", d: "UV-laminated inks that don't fade after a week on the beach. Tested in Caye Caulker heat." },
   { t: "STICKS TO\nANYTHING", d: "Marine-grade adhesive that holds on bottles, boats, bumpers, hard hats and cooler lids." },
-  { t: "ON-ISLAND\nTURNAROUND", d: "Most orders printed and ready within 48 hours. No waiting on Miami shipping." },
+  { t: "ON-ISLAND\nTURNAROUND", d: "Printed in Belize, ready in 48 hours, delivered to Belize City, San Pedro, Caye Caulker, or Belmopan — no overseas freight, no customs." },
 ]
 
 const REVIEWS = [
@@ -663,12 +663,11 @@ function Nav({ accent }: { accent: string }) {
         <a>BANNERS</a>
         <a>VEHICLE WRAPS</a>
         <a>SAMPLES</a>
+        <button className="nav-pill nav-deal">
+          <span>DEALS!</span>
+        </button>
       </div>
       <div className="nav-icons">
-        <button className="nav-pill nav-deal" style={{ background: accent }}>
-          <Icon name="flame" size={16} />
-          <span>HOT DEALS</span>
-        </button>
         <button className="nav-pill nav-icon-btn" style={{ background: accent }} aria-label="Account">
           <Icon name="user" size={18} />
         </button>
@@ -711,73 +710,25 @@ function LogosSection() {
   )
 }
 
-function ProductIllustration({ kind, color }: { kind: ProductKind; color: string }) {
-  if (kind === "banner") {
-    return (
-      <div style={{ width: "78%", aspectRatio: "1.6 / 1", position: "relative" }}>
-        <div style={{ position: "absolute", inset: 0, background: "#fff", border: "4px solid #0a1628", transform: "rotate(-4deg)", boxShadow: "0 10px 0 rgba(10,22,40,0.15)" }}>
-          <div style={{ position: "absolute", inset: "10% 12%", background: color }} />
-          <div style={{ position: "absolute", top: "20%", left: "18%", right: "18%", height: 8, background: "#fff" }} />
-          <div style={{ position: "absolute", top: "35%", left: "18%", right: "30%", height: 8, background: "#fff" }} />
-        </div>
-        <div style={{ position: "absolute", left: "12%", bottom: -14, width: 4, height: 36, background: "#0a1628" }} />
-        <div style={{ position: "absolute", right: "12%", bottom: -14, width: 4, height: 36, background: "#0a1628" }} />
-      </div>
-    )
-  }
-  if (kind === "wrap") {
-    return (
-      <svg viewBox="0 0 200 120" width="80%">
-        <rect x="12" y="48" width="170" height="50" rx="8" fill={color} stroke="#0a1628" strokeWidth="4" />
-        <rect x="40" y="28" width="80" height="40" rx="6" fill="#fff" stroke="#0a1628" strokeWidth="4" />
-        <circle cx="55" cy="100" r="12" fill="#0a1628" />
-        <circle cx="55" cy="100" r="5" fill="#fff" />
-        <circle cx="150" cy="100" r="12" fill="#0a1628" />
-        <circle cx="150" cy="100" r="5" fill="#fff" />
-        <text x="80" y="55" fontFamily="Anton" fontSize="14" fill="#0a1628">YOUR LOGO</text>
-      </svg>
-    )
-  }
-  if (kind === "decal") {
-    return (
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, width: "70%" }}>
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} style={{ aspectRatio: "1.4 / 1", background: i % 2 ? color : "#0a1628", border: "3px solid #fff", boxShadow: "0 4px 0 rgba(10,22,40,0.2)" }} />
-        ))}
-      </div>
-    )
-  }
-  if (kind === "pack") {
-    return (
-      <div style={{ position: "relative", width: "70%", aspectRatio: "1/1" }}>
-        <div style={{ position: "absolute", inset: 0, background: "#00C2D1", border: "4px solid #0a1628", transform: "rotate(-3deg)" }}>
-          <div style={{ padding: 10, fontFamily: "Anton", color: "#fff", fontSize: 14, lineHeight: 1, textShadow: "2px 2px 0 #0a1628" }}>SAMPLE<br />PACK</div>
-          <div style={{ position: "absolute", bottom: 8, right: 8, width: 30, height: 30, borderRadius: "50%", background: "#FFD23F", border: "3px solid #0a1628" }} />
-        </div>
-      </div>
-    )
-  }
-  if (kind === "circle") {
-    return (
-      <div style={{ position: "relative", width: "60%", aspectRatio: "1/1", borderRadius: "50%", background: color, border: "5px solid #fff", boxShadow: "0 8px 0 rgba(10,22,40,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ width: "70%", aspectRatio: "1/1", borderRadius: "50%", border: "3px dashed #fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontFamily: "Anton", fontSize: 22 }}>TM</div>
-      </div>
-    )
-  }
-  if (kind === "shirt") {
-    return (
-      <svg viewBox="0 0 140 140" width="70%">
-        <path d="M30 30 L50 18 L60 26 L80 26 L90 18 L110 30 L100 50 L90 46 L90 120 L50 120 L50 46 L40 50 Z"
-              fill={color} stroke="#fff" strokeWidth="4" />
-        <circle cx="70" cy="75" r="14" fill="#FFD23F" stroke="#fff" strokeWidth="3" />
-      </svg>
-    )
+function ProductIllustration({ kind }: { kind: ProductKind; color: string }) {
+  /* Stable picsum seeds keep the same photo across reloads. Replace
+     these with real Tech Monkeys product photos when available. */
+  const seeds: Record<ProductKind, string> = {
+    tm: "tm-prod-die-cut",
+    banner: "tm-prod-banner",
+    wrap: "tm-prod-vehicle-wrap",
+    decal: "tm-prod-decal",
+    pack: "tm-prod-sample-pack",
+    circle: "tm-prod-circle",
+    shirt: "tm-prod-tshirt",
   }
   return (
-    <div style={{ display: "flex", gap: 10, transform: "rotate(-5deg)" }}>
-      <Sticker design={{ bg: color, fg: "#fff", label: "TM", shape: "rect" }} size={88} />
-      <Sticker design={{ bg: "#FFD23F", fg: "#0a1628", label: "★", shape: "circle" }} size={66} style={{ marginTop: 26 }} />
-    </div>
+    <img
+      src={`https://picsum.photos/seed/${seeds[kind]}/520/520`}
+      alt=""
+      loading="lazy"
+      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+    />
   )
 }
 
@@ -840,25 +791,103 @@ function BuiltDifferent({ accent }: { accent: string }) {
   )
 }
 
+/* Lucide-style icons inlined (MIT). One per premium finish so the
+   marquee reads visually, not just textually. */
+function PremIcon({ name }: { name: string }) {
+  const common = {
+    width: 34, height: 34, viewBox: "0 0 24 24",
+    fill: "none", stroke: "#0a1628", strokeWidth: 2,
+    strokeLinecap: "round" as const, strokeLinejoin: "round" as const,
+  }
+  switch (name) {
+    case "gem": // PREMIUM VINYL
+      return (
+        <svg {...common}>
+          <path d="M6 3h12l4 6-10 13L2 9Z" />
+          <path d="M11 3 8 9l4 13 4-13-3-6" />
+          <path d="M2 9h20" />
+        </svg>
+      )
+    case "sparkles": // HOLOGRAPHIC
+      return (
+        <svg {...common}>
+          <path d="M9.94 9.94 5 12l4.94 2.06L12 19l2.06-4.94L19 12l-4.94-2.06L12 5z" />
+          <path d="M19 3v4" />
+          <path d="M17 5h4" />
+        </svg>
+      )
+    case "stamp": // EMBOSSED
+      return (
+        <svg {...common}>
+          <path d="M5 22h14" />
+          <path d="M19.27 13.73A2.5 2.5 0 0 0 17.5 9H17a3 3 0 0 1-3-3v-.5a2.5 2.5 0 0 0-4.27-1.77" />
+          <path d="M11 5.27 6.73 4.73A2.5 2.5 0 0 0 4 9h.5a3 3 0 0 1 3 3V12a2.5 2.5 0 0 0 1.77 4.27" />
+          <path d="M7 18h10" />
+        </svg>
+      )
+    case "droplet": // GLOSS + MATTE
+      return (
+        <svg {...common}>
+          <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
+        </svg>
+      )
+    case "sun": // UV LAMINATED
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </svg>
+      )
+    case "star": // GLITTER FOIL
+      return (
+        <svg {...common}>
+          <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+        </svg>
+      )
+    case "layers": // CLEAR TRANSFER
+      return (
+        <svg {...common}>
+          <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+          <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
+          <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
+        </svg>
+      )
+    case "shield": // WATERPROOF
+      return (
+        <svg {...common}>
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+          <path d="M12 8a4 4 0 0 0 0 8 4 4 0 0 0 0-8z" opacity="0" />
+        </svg>
+      )
+    default: return null
+  }
+}
+
 function PremiumMarquee() {
   const items = [
-    "PREMIUM VINYL",
-    "HOLOGRAPHIC",
-    "EMBOSSED",
-    "GLOSS + MATTE",
-    "UV LAMINATED",
-    "GLITTER FOIL",
-    "CLEAR TRANSFER",
-    "WATERPROOF",
+    { label: "PREMIUM VINYL", icon: "gem" },
+    { label: "HOLOGRAPHIC", icon: "sparkles" },
+    { label: "EMBOSSED", icon: "stamp" },
+    { label: "GLOSS + MATTE", icon: "droplet" },
+    { label: "UV LAMINATED", icon: "sun" },
+    { label: "GLITTER FOIL", icon: "star" },
+    { label: "CLEAR TRANSFER", icon: "layers" },
+    { label: "WATERPROOF", icon: "shield" },
   ]
-  const dots = ["#00C2D1", "#FFD23F", "#FF6B35", "#5BC85B", "#E94E77", "#7C5CFF"]
   return (
     <div className="prem-marquee">
       <div className="prem-track">
         {[...items, ...items, ...items].map((t, i) => (
           <span key={i} className="prem-item">
-            <span className="prem-text">{t}</span>
-            <span className="prem-dot" style={{ background: dots[i % dots.length] }} />
+            <span className="prem-icon"><PremIcon name={t.icon} /></span>
+            <span className="prem-text">{t.label}</span>
           </span>
         ))}
       </div>
