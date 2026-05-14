@@ -88,7 +88,7 @@
   aspect-ratio: 172 / 58;   /* match the source PNG so it doesn't stretch */
   width: auto;
   border-radius: 0;
-  background: url('/holographic.png') center / 100% 100% no-repeat;
+  background: url('https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/holographic.png') center / 100% 100% no-repeat;
   background-color: transparent;
   color: #0a1628;
   text-shadow: 0 0 1px rgba(255,255,255,0.7);
@@ -101,7 +101,7 @@
   font-weight: 700;
 }
 .nav-deal:hover {
-  background: url('/holographic.png') center / 100% 100% no-repeat;
+  background: url('https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/holographic.png') center / 100% 100% no-repeat;
   transform: rotate(-3deg) scale(1.04);
   box-shadow: none;
   filter: brightness(1.08) saturate(1.1);
@@ -290,8 +290,8 @@
   bottom: -0.22em;
   height: 0.28em;
   background: #f5f3ee;
-  -webkit-mask: url("/underline.svg") center / 100% 100% no-repeat;
-          mask: url("/underline.svg") center / 100% 100% no-repeat;
+  -webkit-mask: url("https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/underline.svg") center / 100% 100% no-repeat;
+          mask: url("https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/underline.svg") center / 100% 100% no-repeat;
   pointer-events: none;
 }
 .hero-pop {
@@ -397,8 +397,8 @@
 /* ====== Torn paper ====== */
 .torn-img {
   width: 100%;
-  -webkit-mask: url("/torn.png") center / 100% 100% no-repeat;
-          mask: url("/torn.png") center / 100% 100% no-repeat;
+  -webkit-mask: url("https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/torn.png") center / 100% 100% no-repeat;
+          mask: url("https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/torn.png") center / 100% 100% no-repeat;
   margin-top: -1px;
   margin-bottom: -1px;
   pointer-events: none;
@@ -594,7 +594,7 @@
 }
 .badge-star {
   width: 96px; height: 96px;
-  background: url('/holographic-star.png') center / contain no-repeat;
+  background: url('https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public/holographic-star.png') center / contain no-repeat;
   color: #0a1628;
   font-family: 'Anton', sans-serif;
   font-size: 14px;

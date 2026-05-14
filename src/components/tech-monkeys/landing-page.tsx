@@ -4,6 +4,7 @@ import "./tech-monkeys.css"
 
 const ACCENT = "#FFD23F"
 const HERO_BG = "#000"
+const ASSETS = "https://raw.githubusercontent.com/DrianeDiojanPerez/tech_monkey_v4/refs/heads/master/public"
 
 type StickerShape = "circle" | "rect" | "pill" | "star"
 type StickerDesign = {
@@ -557,7 +558,7 @@ function FallingStickers() {
         >
           {s.kind === "jeep" ? (
             <img
-              src="/sticker-jeep.png"
+              src={`${ASSETS}/sticker-jeep.png`}
               alt=""
               draggable={false}
               style={{ width: s.size, height: "auto", pointerEvents: "none" }}
@@ -624,7 +625,7 @@ function TechMonkeysLogo({ size = 52 }: { size?: number }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
       <img
-        src="/tech-monkeys-logo.svg"
+        src={`${ASSETS}/tech-monkeys-logo.svg`}
         alt="Tech Monkeys"
         style={{ height: size, width: "auto", display: "block", flexShrink: 0 }}
       />
@@ -1021,7 +1022,7 @@ function FeatureStrip() {
         <div className="feat" key={i}>
           <div className="feat-icon">
             <img
-              src={["/feat-sun.png", "/feat-sticks.png", "/feat-fast.png"][i]}
+              src={[`${ASSETS}/feat-sun.png`, `${ASSETS}/feat-sticks.png`, `${ASSETS}/feat-fast.png`][i]}
               alt=""
               width={120}
               height={120}
