@@ -162,22 +162,25 @@ function Sticker({ design, size = 84, rot = 0, style }: {
   )
 }
 
-/* Initial drop targets — used only to scatter the stickers on first
-   appearance so they don't all stack on one spot. Once they're in the
-   physics loop they move freely. */
+/* The falling layer is extended 100vh above the hero (see CSS). All
+   y values below are in % of the *layer*, so the hero's vertical band
+   is roughly y = 50..100 — the top half of the layer (y = 0..50) is
+   the off-screen drop zone above the viewport. */
+
+/* X spread for initial drop — y here is unused since stickers spawn
+   above the visible area, then physics carries them into the hero. */
 const SPAWN_POINTS: Array<{ x: number; y: number }> = [
-  { x: 12, y: 30 },
-  { x: 88, y: 30 },
-  { x: 18, y: 82 },
-  { x: 40, y: 86 },
-  { x: 60, y: 86 },
-  { x: 86, y: 80 },
+  { x: 12, y: 70 },
+  { x: 88, y: 70 },
+  { x: 18, y: 92 },
+  { x: 40, y: 94 },
+  { x: 60, y: 94 },
+  { x: 86, y: 92 },
 ]
 
 /* Invisible round (elliptical) keep-out around the title + SHOP NOW.
-   Center + radii in % of the layer. Stickers bounce off the ellipse
-   along its surface normal, so the boundary feels organic, not boxy. */
-const TITLE_ELLIPSE = { cx: 50, cy: 40, rx: 26, ry: 20 }
+   In layer coords — center is in the lower half (hero region). */
+const TITLE_ELLIPSE = { cx: 50, cy: 72, rx: 16, ry: 5.5 }
 
 type FallingKind = { kind: "jeep" } | { kind: "chip"; design: StickerDesign }
 type FallingItem = FallingKind & {
@@ -243,11 +246,13 @@ function FallingStickers() {
     const initial: Array<FallingItem> = INITIAL_FALLING.map((base, i) => ({
       ...base,
       x: SPAWN_POINTS[i]!.x + (Math.random() * 10 - 5),
-      y: -40 - Math.random() * 40,
-      vx: (Math.random() * 16 - 8),
-      vy: 18 + Math.random() * 14,
+      // Top of the extended layer = ~100vh above the hero, off-screen.
+      // Stagger per index so they don't all enter the viewport at once.
+      y: 5 + Math.random() * 15 + i * 4,
+      vx: (Math.random() * 12 - 6),
+      vy: 0,
       rot: base.rot + (Math.random() * 80 - 40),
-      vrot: (Math.random() * 240 - 120),
+      vrot: (Math.random() * 200 - 100),
       dragging: false,
     }))
     itemsRef.current = initial
@@ -293,7 +298,10 @@ function FallingStickers() {
         // so resting stickers don't trampoline forever.
         // FLOOR_PCT < 100 keeps stickers above the wavy torn-paper edge
         // at the bottom of the hero.
-        const FLOOR_PCT = 92
+        // Floor sits near the bottom of the extended layer = hero bottom.
+        // Empirically ~96% covers a 100vh-extended layer for typical
+        // viewport sizes (vh ≈ 700-900, hero ≈ 560).
+        const FLOOR_PCT = 96
         if (x < rX) { x = rX; vx = Math.abs(vx) * 0.55 }
         if (x > 100 - rX) { x = 100 - rX; vx = -Math.abs(vx) * 0.55 }
         if (y < rY) { y = rY; vy = Math.abs(vy) * 0.45 }

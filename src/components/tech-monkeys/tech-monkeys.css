@@ -1,7 +1,7 @@
 /* ====== Tech Monkeys landing styles ====== */
 /* Ported from the design package (claude.ai/design). */
 
-.tm-page { overflow: hidden; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0a1628; }
+.tm-page { overflow-x: hidden; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0a1628; }
 .tm-page *, .tm-page *::before, .tm-page *::after { box-sizing: border-box; }
 .tm-page button { cursor: pointer; border: none; }
 .tm-page a { color: inherit; text-decoration: none; cursor: pointer; }
@@ -16,6 +16,8 @@
   padding: 8px 0;
   overflow: hidden;
   border-bottom: 2px solid #0a1628;
+  position: relative;
+  z-index: 30;
 }
 .promo-track {
   display: flex;
@@ -39,7 +41,7 @@
   padding: 18px 28px;
   gap: 20px;
   position: relative;
-  z-index: 5;
+  z-index: 30;
 }
 .nav-links {
   display: flex;
@@ -335,7 +337,12 @@
 /* ====== Falling stickers ====== */
 .falling-layer {
   position: absolute;
-  inset: 0;
+  /* Extend the layer ~1 viewport above the hero so stickers have a real
+     off-screen "box" to fall from before they reach the visible area. */
+  top: -100vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
   z-index: 5;
 }
