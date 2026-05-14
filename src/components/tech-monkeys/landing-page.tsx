@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react"
+import { motion, AnimatePresence, useAnimationFrame } from "motion/react"
 import "./tech-monkeys.css"
 
 const ACCENT = "#FFD23F"
@@ -53,9 +54,9 @@ const PRODUCTS: Array<Product> = [
 ]
 
 const FEATURES = [
-  { t: "BUILT FOR THE\nBELIZE SUN", d: "UV-laminated inks that don't fade after a week on the beach. Tested in Caye Caulker heat." },
-  { t: "STICKS TO\nANYTHING", d: "Marine-grade adhesive that holds on bottles, boats, bumpers, hard hats and cooler lids." },
-  { t: "ON-ISLAND\nTURNAROUND", d: "Printed in Belize, ready in 48 hours, delivered to Belize City, San Pedro, Caye Caulker, or Belmopan — no overseas freight, no customs." },
+  { t: "BOLD COLORS\nTHAT LAST", d: "Every sticker is printed to pop and stay vibrant under sun, rain, and daily use." },
+  { t: "TOUGH ENOUGH\nFOR ANY SURFACE", d: "Strong adhesive that sticks firmly and removes cleanly when needed." },
+  { t: "FAST, RELIABLE\nPRODUCTION", d: "Efficient workflow. No delays. No excuses. Just quality delivered." },
 ]
 
 const REVIEWS = [
@@ -584,16 +585,16 @@ function LogoMark({ seed }: { seed: number }) {
   return <span className="logomark">{variants[seed % variants.length]}</span>
 }
 
-function LogoMarquee({ items, speed = 40, reverse = false, fontFamily }: {
+function LogoMarquee({ items, speed = 60, fontFamily }: {
   items: Array<string>
   speed?: number
-  reverse?: boolean
   fontFamily?: string
 }) {
   const doubled = [...items, ...items]
+  const trackRef = useMarqueeRef(speed, 2)
   return (
     <div className="tm-marquee">
-      <div className="marquee-track" style={{ animationDuration: `${speed}s`, animationDirection: reverse ? "reverse" : "normal" }}>
+      <div className="marquee-track" ref={trackRef}>
         {doubled.map((label, i) => (
           <span key={i} className="marquee-item" style={{ fontFamily }}>
             <LogoMark seed={i} />
@@ -636,10 +637,12 @@ function TechMonkeysLogo({ size = 52 }: { size?: number }) {
 }
 
 function PromoBar() {
+  const SETS = 6
+  const trackRef = useMarqueeRef(70, SETS)
   return (
     <div className="promo-bar">
-      <div className="promo-track">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="promo-track" ref={trackRef}>
+        {Array.from({ length: SETS }).map((_, i) => (
           <span key={i}>
             FREE ISLAND DELIVERY ON ORDERS OVER BZ$200
             <span className="promo-dot">★</span>
@@ -870,6 +873,27 @@ function PremIcon({ name }: { name: string }) {
   }
 }
 
+/* Continuous, jitter-free marquee. Pass it the speed and how many
+   identical sets you duplicated in the JSX so it knows where to wrap.
+   When `pauseOnHover` is true, the animation halts while the cursor
+   is anywhere over the track's parent element. */
+function useMarqueeRef(speedPxPerSec: number, sets: number, pauseOnHover = false) {
+  const ref = useRef<HTMLDivElement>(null)
+  const xRef = useRef(0)
+  useAnimationFrame((_t, delta) => {
+    const el = ref.current
+    if (!el) return
+    if (pauseOnHover && el.parentElement?.matches(":hover")) return
+    xRef.current -= (speedPxPerSec * delta) / 1000
+    const setWidth = el.scrollWidth / sets
+    if (setWidth > 0 && -xRef.current >= setWidth) {
+      xRef.current += setWidth
+    }
+    el.style.transform = `translate3d(${xRef.current}px, 0, 0)`
+  })
+  return ref
+}
+
 function PremiumMarquee() {
   const items = [
     { label: "PREMIUM VINYL", icon: "gem" },
@@ -881,10 +905,11 @@ function PremiumMarquee() {
     { label: "CLEAR TRANSFER", icon: "layers" },
     { label: "WATERPROOF", icon: "shield" },
   ]
+  const trackRef = useMarqueeRef(90, 2)
   return (
     <div className="prem-marquee">
-      <div className="prem-track">
-        {[...items, ...items, ...items].map((t, i) => (
+      <div className="prem-track" ref={trackRef}>
+        {[...items, ...items].map((t, i) => (
           <span key={i} className="prem-item">
             <span className="prem-icon"><PremIcon name={t.icon} /></span>
             <span className="prem-text">{t.label}</span>
@@ -896,14 +921,85 @@ function PremiumMarquee() {
 }
 
 function OfferCard({ accent }: { accent: string }) {
+  /* Stack of product cards eligible for the discount. The top one
+     falls + fades every 2s, then advances — a fresh card appears at
+     the back so 4 cards are always visible. */
+  const ALL = [
+    "https://picsum.photos/seed/tm-prod-die-cut/320/320",
+    "https://picsum.photos/seed/tm-prod-banner/320/320",
+    "https://picsum.photos/seed/tm-prod-vehicle-wrap/320/320",
+    "https://picsum.photos/seed/tm-prod-circle/320/320",
+    "https://picsum.photos/seed/tm-prod-decal/320/320",
+    "https://picsum.photos/seed/tm-prod-sample-pack/320/320",
+    "https://picsum.photos/seed/tm-prod-tshirt/320/320",
+  ]
+  const VISIBLE = 4
+  const [topIdx, setTopIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setTopIdx((i) => (i + 1) % ALL.length), 3500)
+    return () => clearInterval(t)
+  }, [ALL.length])
+
   return (
     <section className="offer-wrap">
       <div className="offer">
         <div className="offer-left">
           <div className="offer-art">
-            <Sticker design={{ bg: "#FF6B35", fg: "#fff", label: "BZ", shape: "circle" }} size={150} rot={-12} />
-            <Sticker design={{ bg: "#00C2D1", fg: "#0a1628", label: "STICK", shape: "rect" }} size={130} rot={8} style={{ marginLeft: -40, marginTop: 60 }} />
-            <Sticker design={{ bg: "#FFD23F", fg: "#0a1628", label: "★", shape: "star" }} size={90} rot={20} style={{ marginLeft: -30, marginTop: -20 }} />
+            <div className="offer-art-anchor">
+              {ALL.map((src, cardIdx) => {
+                const depth = (cardIdx - topIdx + ALL.length) % ALL.length
+                const isInWindow = depth >= 1 && depth < VISIBLE
+                // When a card "leaves" via depth 0 (i.e., it just
+                // became the top), park it at its previous visible
+                // position and fade it out — don't fling it to the
+                // back of the stack.
+                const layoutDepth =
+                  isInWindow ? depth : depth === 0 ? 1 : VISIBLE
+                const offset = layoutDepth * 10
+                const tilt = layoutDepth * (layoutDepth % 2 ? -3 : 3)
+                return (
+                  <motion.div
+                    key={`card-${cardIdx}`}
+                    className="offer-card"
+                    style={{ zIndex: VISIBLE - depth }}
+                    animate={{
+                      x: offset,
+                      y: offset,
+                      rotate: tilt,
+                      opacity: isInWindow ? 1 : 0,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 140,
+                      damping: 22,
+                      mass: 0.9,
+                    }}
+                  >
+                    <img src={src} alt="" />
+                  </motion.div>
+                )
+              })}
+              <AnimatePresence>
+                <motion.div
+                  key={`top-${topIdx}`}
+                  className="offer-card"
+                  initial={{ x: 0, y: 0, rotate: 0, opacity: 1, zIndex: VISIBLE + 10 }}
+                  animate={{ x: 0, y: 0, rotate: 0, opacity: 1, zIndex: VISIBLE + 10 }}
+                  exit={{
+                    // Bump the exiting card above everything else so it
+                    // falls in front of the new top, not behind it.
+                    zIndex: 999,
+                    x: 0,
+                    y: 240,
+                    rotate: -14,
+                    opacity: 0,
+                    transition: { duration: 0.9, ease: [0.4, 0.0, 0.7, 1] },
+                  }}
+                >
+                  <img src={ALL[topIdx]!} alt="" />
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
         <div className="offer-right">
@@ -924,7 +1020,13 @@ function FeatureStrip() {
       {FEATURES.map((f, i) => (
         <div className="feat" key={i}>
           <div className="feat-icon">
-            <Sticker design={STICKER_DESIGNS[((i + 1) * 3) % STICKER_DESIGNS.length]!} size={64} rot={(i - 1) * 8} />
+            <img
+              src={["/feat-sun.png", "/feat-sticks.png", "/feat-fast.png"][i]}
+              alt=""
+              width={120}
+              height={120}
+              style={{ display: "block" }}
+            />
           </div>
           <h3 className="feat-title">
             {f.t.split("\n").map((l, j) => <span key={j}>{l}<br /></span>)}
@@ -994,10 +1096,11 @@ function FollowSection() {
     { bg: "#00C2D1", label: "WRAP\nDAY", small: "before/after", img: "https://picsum.photos/seed/tm-wrap/420/520" },
     { bg: "#FFD23F", label: "FRESH\nDROPS", small: "new finishes", img: "https://picsum.photos/seed/tm-drops/420/520" },
   ]
-  // Triple the tiles for a seamless right-to-left marquee — translating
-  // by exactly one set-width then snapping to 0 is visually invisible
-  // because the next set already occupies the same screen positions.
-  const doubled = [...tiles, ...tiles, ...tiles]
+  // Triple the tiles. Motion's useAnimationFrame drives a perfectly
+  // continuous translate — no CSS keyframe restarts to glitch on.
+  const SETS = 3
+  const doubled = Array.from({ length: SETS }).flatMap(() => tiles)
+  const trackRef = useMarqueeRef(60, SETS, true)
   return (
     <section className="follow">
       <div className="follow-head">
@@ -1005,7 +1108,7 @@ function FollowSection() {
         <div className="follow-handle">@TECHMONKEYSBZ</div>
       </div>
       <div className="follow-marquee">
-        <div className="follow-track">
+        <div className="follow-track" ref={trackRef}>
           {doubled.map((t, i) => (
             <div key={i} className="follow-tile" style={{ background: t.bg }}>
               <img className="tile-img" src={t.img} alt="" decoding="async" />

@@ -22,16 +22,12 @@
 .promo-track {
   display: flex;
   white-space: nowrap;
-  animation: tm-marquee 40s linear infinite;
   gap: 28px;
+  width: max-content;
+  will-change: transform;
 }
 .promo-track > span { display: inline-flex; gap: 28px; align-items: center; }
 .promo-dot { display: inline-block; padding: 0 14px; color: #FF6B35; }
-
-@keyframes tm-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
 
 /* ====== Nav ====== */
 .tm-nav {
@@ -425,8 +421,8 @@
   display: flex;
   gap: 64px;
   white-space: nowrap;
-  animation: tm-marquee linear infinite;
   width: max-content;
+  will-change: transform;
 }
 .marquee-item {
   display: inline-flex;
@@ -567,7 +563,6 @@
 }
 .prod-card:hover .prod-title { color: #fff; }
 .prod-card:hover .prod-art { background: linear-gradient(180deg, #fff 0%, #dbecff 100%) !important; }
-.prod-card:hover .prod-shop { box-shadow: -4px 5px 0 0 #0a1628; }
 .prod-title {
   font-family: 'Anton', sans-serif;
   font-size: 30px;
@@ -630,8 +625,9 @@
   display: flex;
   gap: 36px;
   white-space: nowrap;
-  animation: tm-marquee 40s linear infinite;
   width: max-content;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 .prem-item {
   display: inline-flex; align-items: center; gap: 22px;
@@ -669,7 +665,40 @@
   padding: 50px 30px;
   position: relative;
 }
-.offer-art { display: flex; align-items: center; }
+.offer-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 260px;
+  height: 260px;
+  position: relative;
+}
+.offer-art-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+.offer-card {
+  position: absolute;
+  top: -110px;
+  left: -110px;
+  width: 220px;
+  height: 220px;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px -8px rgba(10,22,40,0.35), 0 4px 0 rgba(10,22,40,0.18);
+}
+.offer-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* The offer-card transforms are driven by motion now — no CSS
+   keyframes or transitions needed. */
 .offer-right {
   background: #fff;
   padding: 50px 50px 50px 60px;
@@ -704,17 +733,19 @@
 .feat { text-align: center; }
 .feat-icon { display: flex; justify-content: center; margin-bottom: 18px; }
 .feat-title {
-  font-family: 'Anton', sans-serif;
-  font-size: 26px;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  margin: 0 0 10px;
+  font-family: 'Dela Gothic One', 'Anton', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  margin: 0 0 14px;
+  color: #0a1628;
 }
 .feat-desc {
-  color: rgba(10,22,40,0.7);
-  font-size: 14px;
-  line-height: 1.55;
-  max-width: 280px;
+  color: rgba(10,22,40,0.72);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 320px;
   margin: 0 auto;
 }
 
@@ -839,20 +870,9 @@
   display: flex;
   gap: 14px;
   width: max-content;
-  animation: tm-follow-marquee 25s linear infinite;
   padding: 4px 0;
   will-change: transform;
   backface-visibility: hidden;
-  /* Each tile = 240px wide + 14px gap = 254px. 5 originals (one full
-     set) = 1270px — that's our exact loop distance. */
-  --tile-stride: 1270px;
-}
-.follow-marquee:hover .follow-track { animation-play-state: paused; }
-/* Right-to-left, fixed pixel distance so the speed is constant regardless
-   of image load state or layout reflow. */
-@keyframes tm-follow-marquee {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(calc(var(--tile-stride) * -1), 0, 0); }
 }
 .follow-tile {
   flex: 0 0 240px;
